@@ -33,7 +33,7 @@ export default function App() {
     setError(null)
     try {
       const params = new URLSearchParams({ pageNumber: productPage, pageSize: 12 })
-      if (search) params.set('search', search)
+      if (search) params.set('name', search)
       if (category) params.set('category', category)
 
       const res = await fetch(`${API_BASE}?${params}`)
