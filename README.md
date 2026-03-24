@@ -23,9 +23,9 @@ npm run dev:all
 
 This starts both concurrently:
 
-| Server | URL | Purpose |
-|---|---|---|
-| Vite (frontend) | http://localhost:5173 | React app |
+| Server            | URL                   | Purpose            |
+| ----------------- | --------------------- | ------------------ |
+| Vite (frontend)   | http://localhost:5173 | React app          |
 | Express (backend) | http://localhost:3001 | Order API + SQLite |
 
 Alternatively, run them in separate terminals:
@@ -96,3 +96,45 @@ npm run build
 ```
 
 The compiled frontend is output to `dist/`. The Express server must still be running separately to handle order submissions.
+
+---
+
+# Design Decisions:
+
+- I opted to go with a card based approach to products as it felt more modern and would (hopefully) translate better to mobile devices.
+
+- I used a grid approach to layout to make it easier to use via a mobile device and be able to see more items at a glance from a desktop perspective.
+
+- I tried to put as much info per card as made sense
+
+- I based the order page on most ordering pages I've seen in hopes that keeping it familiar would be easier to use.
+
+# Things I didn't get to do:
+
+## Unit testing
+
+This is something I would normally stand on as a requirement, but given the time frame I opted to not. As a time saver I could have them AI generated, and then review them.
+
+## Mobile View
+
+I didn't get a chance to thoroughly test how this looks in a mobile app environment. I believe it should look okay based off the CSS used, however I didn't get a chance to verify it so I can't say for certain.
+
+## Implement any of the customers suggestions
+
+Which is a real bummer because they had some good ones. Given enough time, I would have:
+
+- Done a price comparison to previous day and then set the color of the price either red (price went up) or green (price went down) along with an arrow of the same color to let the user see how the price is trending.
+
+- Create a text message notification that goes to the foreman with a link to the order that allows them to edit it before approval.
+
+- Create an order history feature that shows what has been previously ordered and allow for quick reordering of the same items.
+
+# AI prompts I used:
+
+```
+
+Add pricing data to each Product Card from the api: https://api.casestudy.enterbridge.com/api/prices
+
+Create an order page where customers can order products based off their current pricing.
+
+```
