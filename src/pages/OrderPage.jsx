@@ -17,6 +17,7 @@ export default function OrderPage({ cart, onUpdateQty, onClearCart, onBack }) {
   const [form, setForm] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const items = Object.values(cart)
 
@@ -43,15 +44,41 @@ export default function OrderPage({ cart, onUpdateQty, onClearCart, onBack }) {
     return errs
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length > 0) {
       setErrors(errs)
       return
     }
-    setSubmitted(true)
-    onClearCart()
+
+    setSaving(true)
+    try {
+      const res = await fetch('/local-api/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: form,
+          items: items.map(({ product, price, quantity }) => ({
+            productId:    product.id,
+            productName:  product.name,
+            productSku:   product.sku,
+            priceAmount:  Number(price.amount),
+            unitOfMeasure: price.unitOfMeasure,
+            priceQuantity: Number(price.quantity),
+            quantity,
+            lineTotal:    Number(price.amount) * quantity,
+          })),
+        }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      setSubmitted(true)
+      onClearCart()
+    } catch (err) {
+      setErrors({ submit: `Failed to place order: ${err.message}` })
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (submitted) {
@@ -205,8 +232,9 @@ export default function OrderPage({ cart, onUpdateQty, onClearCart, onBack }) {
             </div>
             <p className={styles.taxNote}>Taxes and shipping calculated at confirmation.</p>
             {errors.cart && <p className={styles.cartError}>{errors.cart}</p>}
-            <button type="submit" className={styles.submitBtn}>
-              Place Order →
+            {errors.submit && <p className={styles.cartError}>{errors.submit}</p>}
+            <button type="submit" className={styles.submitBtn} disabled={saving}>
+              {saving ? 'Placing Order…' : 'Place Order →'}
             </button>
           </aside>
         </form>
