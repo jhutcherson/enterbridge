@@ -26,23 +26,81 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
 }
 
 .brandIcon {
   font-size: 1.5rem;
 }
 
-.brand h1 {
+.brandName {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary);
   letter-spacing: -0.02em;
 }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .count {
   font-size: 0.875rem;
   color: var(--text-muted);
   font-weight: 500;
+}
+
+.cartBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.cartBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.cartBtnActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.cartBtnActive:hover {
+  background: var(--primary-hover);
+  color: white;
+}
+
+.cartBadge {
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+  line-height: 1;
 }
 
 .main {

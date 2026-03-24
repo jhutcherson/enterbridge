@@ -10,7 +10,7 @@ const CATEGORY_COLORS = {
   Concrete:    { bg: '#e5e7eb', color: '#4b5563' },
 }
 
-export default function ProductCard({ product, price }) {
+export default function ProductCard({ product, price, cartQty, onAddToCart }) {
   const { name, description, sku, category } = product
   const badge = CATEGORY_COLORS[category] ?? { bg: '#ede9fe', color: '#7c3aed' }
 
@@ -48,6 +48,13 @@ export default function ProductCard({ product, price }) {
           <span className={styles.noPrice}>No pricing data</span>
         )}
       </div>
+      <button
+        className={`${styles.addBtn} ${cartQty > 0 ? styles.addBtnInCart : ''}`}
+        disabled={!price}
+        onClick={() => onAddToCart(product, price)}
+      >
+        {cartQty > 0 ? `✓ In Cart (${cartQty})` : '+ Add to Order'}
+      </button>
     </div>
   )
 }
