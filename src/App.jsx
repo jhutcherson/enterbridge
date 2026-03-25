@@ -43,23 +43,19 @@ export default function App() {
       setProducts(items)
       if (data.pageNumber !== undefined) setPagination(data)
 
-      const ids = items.map((p) => p.id).join(',')
-      if (ids) {
-        const priceRes = await fetch(
-          `${PRICES_API}?productIds=${ids}&pageSize=100&sortBy=dateTime&sortDesc=true`
+      if (items.length) {
+        const priceResults = await Promise.all(
+          items.map((p) =>
+            fetch(`${PRICES_API}?productIds=${p.id}&pageSize=1&sortBy=dateTime&sortDesc=true`)
+              .then((r) => (r.ok ? r.json() : null))
+          )
         )
-        if (priceRes.ok) {
-          const priceData = await priceRes.json()
-          const priceItems = priceData.items ?? []
-          const latestByProduct = {}
-          for (const p of priceItems) {
-            const existing = latestByProduct[p.productId]
-            if (!existing || new Date(p.dateTime) > new Date(existing.dateTime)) {
-              latestByProduct[p.productId] = p
-            }
-          }
-          setPrices(latestByProduct)
-        }
+        const latestByProduct = {}
+        priceResults.forEach((data, i) => {
+          const item = data?.items?.[0]
+          if (item) latestByProduct[items[i].id] = item
+        })
+        setPrices(latestByProduct)
       }
     } catch (err) {
       setError(err.message)
